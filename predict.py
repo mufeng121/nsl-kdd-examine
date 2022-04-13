@@ -23,10 +23,10 @@ import os
 model = sys.argv[1]
 datapath = sys.argv[2]
 
-os.system("zeek -r " + datapath + " ./tcpdump2gureKDDCup99/darpa2gurekddcup.zeek > ./cache/conn.list")
+os.system("zeek -r " + datapath + " ./tcpdump2gureKDDCup99/darpa2gurekddcup.zeek > ./cache/conn.list 2>/dev/null")
 os.system("rm *.log 2>/dev/null")
 os.system("sort -n ./cache/conn.list > ./cache/conn_sort.list 2>/dev/null")
-os.system("gcc ./tcpdump2gureKDDCup99/trafAld.c -o ./tcpdump2gureKDDCup99/trafAld")
+os.system("gcc ./tcpdump2gureKDDCup99/trafAld.c -o ./tcpdump2gureKDDCup99/trafAld 2>/dev/null")
 os.system("./tcpdump2gureKDDCup99/trafAld ./cache/conn_sort.list 2>/dev/null")
 
 col_names = ["duration","protocol","service","flag","src_bytes","dst_bytes","land","wrong_fragment","urgent","hot",
@@ -38,9 +38,10 @@ col_names = ["duration","protocol","service","flag","src_bytes","dst_bytes","lan
             ]
 
 
-df_test = pd.read_csv("trafAld.list",header=None,delimiter = " ")
+df_test = pd.read_csv("output.csv",header=None,delimiter = " ")
 df_test = df_test.drop(labels=[0,1,2,3,4,5],axis=1)
 df_test.columns=col_names
+df_test.to_csv("output.csv", sep="\t")
 print("Dataset is saved to output.csv.")
 df_test['protocol'] = df_test['protocol'].astype('category')
 df_test['protocol']= df_test['protocol'].cat.codes

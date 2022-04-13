@@ -252,7 +252,7 @@ int main(int argc, char **argv)
 
 
 	//idatzi trafAldagaiak
-	sprintf(galdera, "trafAld.list");
+	sprintf(galdera, "output.csv");
 	ftrafAld = fopen(galdera, "w");	
 	for(i=0; i<inigoKop; i++){
 		fprintf(ftrafAld, "%s\n", inigo[i]);
