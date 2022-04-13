@@ -118,20 +118,169 @@ function conn_state(c: connection, trans: string): string
 	else
 		return "OTH";
 	}
+# Comment out services that don"t have known conventional port,
+# or the service name itself is not clear.
+global port_names = {
+#  "aol",
+#  "auth",
+	[179/tcp] = "bgp",
+	[179/udp] = "bgp",
+#	"courier",
+	[105/tcp] = "csnet_ns",
+	[105/udp] = "csnet_ns",
+	[84/tcp] = "ctf",
+	[84/udp] = "ctf",
+	[13/tcp] = "daytime",
+	[13/udp] = "daytime",
+	[9/tcp] = "discard",
+	[9/udp] = "discard",
+	[53/tcp] = "domain",
+	[53/udp] = "domain_u",
+	[7/tcp] = "echo",
+	[7/udp] = "echo",
+# "eco_i"
+#	"ecr_i",
+	[520/tcp] = "efs",
+#"exec",
+	[79/tcp] = "finger",
+	[21/tcp] = "ftp",
+	[20/tcp] = "ftp_data",
+	[70/tcp] = "gopher",
+	[79/udp] = "finger",
+	[21/udp] = "ftp",
+	[20/udp] = "ftp_data",
+	[70/udp] = "gopher",
+#	"harvest",
+#	"hostnames",
+	[80/tcp] = "http",
+	[2784/tcp] = "http_2784",
+	[443/tcp] = "http_443",
+	[8001/tcp] = "http_8001",
+	[143/tcp] = "imap4",
+	[194/tcp] = "IRC",
+	[102/tcp] = "iso_tsap",
+	[543/tcp] = "klogin",
+	[544/tcp] = "kshell",
+	[389/tcp] = "ldap",
+	[80/udp] = "http",
+	[2784/udp] = "http_2784",
+	[443/udp] = "http_443",
+	[8001/udp] = "http_8001",
+	[143/udp] = "imap4",
+	[194/udp] = "IRC",
+	[102/udp] = "iso_tsap",
+	[543/udp] = "klogin",
+	[544/udp] = "kshell",
+	[389/udp] = "ldap",
+	[245/tcp] = "link",
+	[245/udp] = "link",
+#	"login",
+#	"mtp",
+	[42/tcp] = "name",
+	[138/tcp] = "netbios_dgm",
+	[137/tcp] = "netbios_ns",
+	[139/tcp] = "netbios_ssn",
+	[15/tcp] = "netstat",
+	[433/tcp] = "nnsp",
+	[119/tcp] = "nntp",
+	[42/udp] = "name",
+	[138/udp] = "netbios_dgm",
+	[137/udp] = "netbios_ns",
+	[139/udp] = "netbios_ssn",
+	[15/udp] = "netstat",
+	[433/udp] = "nnsp",
+	[119/udp] = "nntp",
+#	"ntp_u",
+#	"other",
+#	"pm_dump",
+	[109/tcp] = "pop_2",
+	[110/tcp] = "pop_3",
+	[35/tcp] = "printer",
+	[109/udp] = "pop_2",
+	[110/udp] = "pop_3",
+	[35/udp] = "printer",
+#	"private",
+#	"red_i",
+#	"remote_job",
+	[5/tcp] = "rje",
+	[5/udp] = "rje",
+	[514/tcp] = "shell",
+	[25/tcp] = "smtp",
+	[25/udp] = "smtp",
+	[66/tcp] = "sql_net",
+	[66/udp] = "sql_net",
+	[22/tcp] = "ssh",
+	[22/udp] = "ssh",
+	[111/tcp] = "sunrpc",
+	[111/udp] = "sunrpc",
+	[95/tcp] = "supdup",
+	[95/udp] = "supdup",
+	[11/tcp] = "systat",
+	[11/udp] = "systat",
+	[23/tcp] = "telnet",
+	[23/udp] = "telnet",
+	[69/tcp] = "tftp_u",
+	[69/udp] = "tftp_u",
+#	"tim_i",
+	[37/tcp] = "time",
+	[37/udp] = "time",
+#	"urh_i",
+#	"urp_i",
+	[540/tcp] = "uucp",
+	[540/udp] = "uucp",
+	[117/tcp] = "uucp_path",
+	[117/udp] = "uucp_path",
+	[175/tcp] = "vmnet",
+	[175/udp] = "vmnet",
+	[63/tcp] = "whois",
+	[63/udp] = "whois",
+#	"X11",
+	[210/tcp] = "Z39_50",
+	[210/udp] = "Z39_50"
+};
 
 #TCP eta UDPrako
-#function service_name(p: port): string
-#{
-	#Erantzuten duen konexioaren zerbitzu izena itzultzen du (http,ftp,...)
-#	if ( p in port_names )
-#		return port_names[p];
-#	else{
-#		if ((49152/tcp<=p && p<=65535/tcp) || (49152/udp<=p && p<=65535/udp))
-#			return "private";
-#		else
-#			return "other";
-#	}
-#}
+function service_name(p: port): string
+  {
+  # Erantzuten duen konexioaren zerbitzu izena itzultzen du (http,ftp,...)
+	if ( p in port_names )
+		 return port_names[p];
+	else{
+	   if ((6000/tcp<=p && p<=6063/tcp) || (6000/udp<=p && p<=6063/udp))
+		   return "X11";
+		 	 else{
+			   if ((49152/tcp<=p && p<=65535/tcp) || (49152/udp<=p && p<=65535/udp))
+				   return "private";
+			   else
+			   	 return "other";
+			 }
+	    }
+   }
+global icmp_service_names = {
+  [8] = "eco_i",
+	[0] = "ecr_i",
+  [5] = "red_i",
+#	[14] = "tim_i",
+};
+#ICMP service
+function service_name_icmp(orig_p: string, resp_p: string): string
+{
+  local itype : count = to_count(orig_p);
+	local icode : count = to_count(resp_p);
+	if (itype in icmp_service_names)
+		  return icmp_service_names[itype];
+	else{
+	    if (icode == 1)
+		     return "urh_i";
+			else {
+		     if (icode == 3)
+			    	return "urp_i";
+		     else
+			    	return "other";
+			}
+	}
+	
+}
 
 ########################## TCP ##############################
 function record_connectionTCP(c: connection){
@@ -473,7 +622,7 @@ event icmp_time_exceeded(c: connection, icmp: icmp_conn, code: count, context: i
 }
 
 #Amaitzean konexio guztiak idatzi
-event bro_done()
+event zeek_done()
 {
 	local land : count;
 	local root_shell : count;
@@ -485,11 +634,11 @@ event bro_done()
 		root_shell = (konexioaktcp[startTimet, orig_ht, orig_pt, resp_ht, resp_pt]$root_shell_num>0) ? 1 : 0;
 		is_hot_login = (konexioaktcp[startTimet, orig_ht, orig_pt, resp_ht, resp_pt]$is_hot_login > 0) ? 1 : 0;
 		is_guest_login = (konexioaktcp[startTimet, orig_ht, orig_pt, resp_ht, resp_pt]$is_guest_login > 0) ? 1 : 0;
-		print fmt("%d %s %d %d %s %s %s %s %d %s %s %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
+		print fmt("%d %s %d %d %s %s %s %s %s %s %s %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
    		konexioaktcp[startTimet, orig_ht, orig_pt, resp_ht, resp_pt]$num_conn, startTimet, 
     		orig_pt, resp_pt, orig_ht, resp_ht, 
     		konexioaktcp[startTimet, orig_ht, orig_pt, resp_ht, resp_pt]$duration, "tcp",
-				resp_pt,
+				service_name(resp_pt),
         konexioaktcp[startTimet, orig_ht, orig_pt, resp_ht, resp_pt]$flag,
         konexioaktcp[startTimet, orig_ht, orig_pt, resp_ht, resp_pt]$src_bytes,
         konexioaktcp[startTimet, orig_ht, orig_pt, resp_ht, resp_pt]$dst_bytes, land, 
@@ -541,7 +690,8 @@ event bro_done()
        	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_h, 
        	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_h,
        	duration, "icmp", 
-       	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_p,
+       	service_name_icmp(konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_p, 
+			                    konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_p),
      		konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$flag,
      		konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$src_bytes, 
      		konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$dst_bytes, land,
@@ -560,10 +710,10 @@ event bro_done()
 		}
 		#udp
 		else if (konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$protokoloa == "udp"){
-      print fmt("%d %s %d %d %s %s %s %s %d %s %s %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
+      print fmt("%d %s %d %d %s %s %s %s %s %s %s %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
          konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$num_conn, startTime,
      		 orig_p, resp_p, orig_h, resp_h, duration, "udp",
-				 resp_p,
+				 service_name(resp_pt),
          konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$flag,
          konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$src_bytes,
          konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$dst_bytes, land, 
@@ -1313,13 +1463,5 @@ event conn_weird (name: string, c: connection, addl: string){
 }
 
 event conn_weird_addl(name: string, c: connection, addl: string)
-{
-}
-
-event flow_weird(name: string, src: addr, dst: addr)
-{
-}
-
-event net_weird(name: string)
 {
 }
