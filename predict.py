@@ -22,6 +22,9 @@ import os
 
 model = sys.argv[1]
 datapath = sys.argv[2]
+outputfile = "output.csv"
+if len(sys.argv) == 4:
+    outputfile = sys.argv[3]
 
 os.system("zeek -r " + datapath + " ./tcpdump2gureKDDCup99/darpa2gurekddcup.zeek > ./cache/conn.list 2>/dev/null")
 os.system("rm *.log 2>/dev/null")
@@ -41,8 +44,8 @@ col_names = ["duration","protocol","service","flag","src_bytes","dst_bytes","lan
 df_test = pd.read_csv("output.csv",header=None,delimiter = " ")
 df_test = df_test.drop(labels=[0,1,2,3,4,5],axis=1)
 df_test.columns=col_names
-df_test.to_csv("output.csv", sep="\t")
-print("Dataset is saved to output.csv.")
+df_test.to_csv(outputfile, sep="\t")
+print("Dataset is saved to", outputfile)
 df_test['protocol'] = df_test['protocol'].astype('category')
 df_test['protocol']= df_test['protocol'].cat.codes
 df_test['service'] = df_test['service'].astype('category')
