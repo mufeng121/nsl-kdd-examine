@@ -26,11 +26,11 @@ outputfile = "output.csv"
 if len(sys.argv) == 4:
     outputfile = sys.argv[3]
 
-os.system("zeek -r " + datapath + " ./tcpdump2gureKDDCup99/darpa2gurekddcup.zeek > ./cache/conn.list 2>/dev/null")
+os.system("zeek -r " + datapath + " ./tcpdump2gureKDDCup99/darpa2gurekddcup.zeek > ./cache/conn.list")
 os.system("rm *.log 2>/dev/null")
-os.system("sort -n ./cache/conn.list > ./cache/conn_sort.list 2>/dev/null")
-os.system("gcc ./tcpdump2gureKDDCup99/trafAld.c -o ./tcpdump2gureKDDCup99/trafAld 2>/dev/null")
-os.system("./tcpdump2gureKDDCup99/trafAld ./cache/conn_sort.list 2>/dev/null")
+os.system("sort -n ./cache/conn.list > ./cache/conn_sort.list")
+os.system("gcc ./tcpdump2gureKDDCup99/trafAld.c -o ./tcpdump2gureKDDCup99/trafAld")
+os.system("./tcpdump2gureKDDCup99/trafAld ./cache/conn_sort.list")
 
 col_names = ["duration","protocol","service","flag","src_bytes","dst_bytes","land","wrong_fragment","urgent","hot",
             "num_failed_logins","logged_in","num_compromised","root_shell","su_attempted","num_root","num_file_creations",
