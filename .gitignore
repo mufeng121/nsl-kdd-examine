@@ -2,3 +2,4 @@
 output.csv
 cache/conn.list
 cache/conn_sort.list
+.DS_Store
