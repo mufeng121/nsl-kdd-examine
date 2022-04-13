@@ -1,3 +1,4 @@
 
 output.csv
-cache/*
+cache/conn.list
+cache/conn_sort.list
