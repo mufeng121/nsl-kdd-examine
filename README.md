@@ -20,6 +20,7 @@ python predict.py best_dt_clf.joblib nmap.pcap
 # or
 python predict.py model1 nmap.pcap
 ```
+<img src="media/run.png" width="80%" height="80%" />
 
 ## Notes
 If you want to test the program performance with the NSK-KDD test dataset, please run: 
