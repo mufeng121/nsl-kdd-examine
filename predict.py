@@ -26,7 +26,7 @@ outputfile = "output.csv"
 if len(sys.argv) == 4:
     outputfile = sys.argv[3]
 
-os.system("zeek -r " + datapath + " ./tcpdump2gureKDDCup99/darpa2gurekddcup.zeek > ./cache/conn.list")# 2>/dev/null")
+os.system("zeek -r " + datapath + " ./tcpdump2gureKDDCup99/darpa2gurekddcup.zeek > ./cache/conn.list 2>/dev/null")
 os.system("rm *.log 2>/dev/null")
 os.system("sort -n ./cache/conn.list > ./cache/conn_sort.list 2>/dev/null")
 os.system("gcc ./tcpdump2gureKDDCup99/trafAld.c -o ./tcpdump2gureKDDCup99/trafAld 2>/dev/null")
