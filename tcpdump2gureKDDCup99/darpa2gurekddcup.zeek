@@ -440,7 +440,7 @@ function record_connectionICMP(c: connection){
   }
 }
 
-event icmp_echo_request(c: connection, icmp: icmp_conn, id: count, seq: count, payload: string)
+event icmp_echo_request(c: connection, icmp: icmp_info, id: count, seq: count, payload: string)
 {
   local startTime : string = fmt ("%.6f", c$start_time-6*60min);
   local duration : string = fmt ("%.6f", c$duration);
@@ -467,8 +467,6 @@ event icmp_echo_request(c: connection, icmp: icmp_conn, id: count, seq: count, p
   
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_p = fmt("%d", icmp$itype);
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_p = fmt("%d", icmp$icode);
-  konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_h = fmt("%s", icmp$orig_h);
-  konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_h = fmt("%s", icmp$resp_h);
  
   #Payload
 #  local izena1 : string = fmt("payload/%d.a", konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$num_conn);
@@ -485,7 +483,7 @@ event icmp_echo_request(c: connection, icmp: icmp_conn, id: count, seq: count, p
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$payDu = T;
 }
 
-event icmp_echo_reply(c: connection, icmp: icmp_conn, id: count, seq: count, payload: string)
+event icmp_echo_reply(c: connection, icmp: icmp_info, id: count, seq: count, payload: string)
 {
   local startTime : string = fmt ("%.6f", c$start_time-6*60min);
   local duration : string = fmt ("%.6f", c$duration);
@@ -512,8 +510,6 @@ event icmp_echo_reply(c: connection, icmp: icmp_conn, id: count, seq: count, pay
   
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_p = fmt("%d", icmp$itype);
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_p = fmt("%d", icmp$icode);
-  konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_h = fmt("%s", icmp$orig_h);
-  konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_h = fmt("%s", icmp$resp_h);
 
   #Payload
 #  local izena1 : string = fmt("payload/%d.a", konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$num_conn);
@@ -530,7 +526,7 @@ event icmp_echo_reply(c: connection, icmp: icmp_conn, id: count, seq: count, pay
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$payDu = T;
 }
 
-event icmp_unreachable(c: connection, icmp: icmp_conn, code: count, context: icmp_context)
+event icmp_unreachable(c: connection, icmp: icmp_info, code: count, context: icmp_context)
 {
   local startTime : string = fmt ("%.6f", c$start_time-6*60min);
   local duration : string = fmt ("%.6f", c$duration);
@@ -556,8 +552,6 @@ event icmp_unreachable(c: connection, icmp: icmp_conn, code: count, context: icm
   
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_p = fmt("%d", icmp$itype);
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_p = fmt("%d", icmp$icode);
-	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_h = fmt("%s", icmp$orig_h);
-  konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_h = fmt("%s", icmp$resp_h);
 
   #Payload
 #  local izena1 : string = fmt("payload/%d.a", konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$num_conn);
@@ -574,7 +568,7 @@ event icmp_unreachable(c: connection, icmp: icmp_conn, code: count, context: icm
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$payDu = T;
 }
 
-event icmp_time_exceeded(c: connection, icmp: icmp_conn, code: count, context: icmp_context)
+event icmp_time_exceeded(c: connection, icmp: icmp_info, code: count, context: icmp_context)
 {
   local startTime : string = fmt ("%.6f", c$start_time-6*60min);
   local duration : string = fmt ("%.6f", c$duration);
@@ -602,8 +596,6 @@ event icmp_time_exceeded(c: connection, icmp: icmp_conn, code: count, context: i
 
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_p = fmt("%d", icmp$itype);
   konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_p = fmt("%d", icmp$icode);
-	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_h = fmt("%s", icmp$orig_h);
-  konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_h = fmt("%s", icmp$resp_h);
   
   #Payload
 #  local izena1 : string = fmt("payload/%d.a", konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$num_conn);
@@ -687,8 +679,7 @@ event zeek_done()
        	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$num_conn, startTime, 
        	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_p, 
        	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_p, 
-       	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_h, 
-       	konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_h,
+       	orig_h, resp_h,
        	duration, "icmp", 
        	service_name_icmp(konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$orig_p, 
 			                    konexioak[startTime, duration, orig_h, orig_p, resp_h, resp_p]$resp_p),
