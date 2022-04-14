@@ -5,7 +5,7 @@ Anomaly intrusion detection system
 ### Installing tools
 ```shell
 # Install zeek for running the bro scripy
-# https://docs.zeek.org/en/master/install.html for further details
+# https://docs.zeek.org/en/master/install.html for installation details
 brew install zeek # with brew
 ```
 ### Installing dependencies
@@ -40,11 +40,16 @@ python test.py model1 test.csv
 ./*.joblib : trained joblib models, can be used as input to predict.py and test.py
 ./model1~5 : trained joblib models, can be used as input to predict.py and test.py
 
-./*.pcap : samlple test case pcap files, used as input to predict.py
+./*.pcap : pcap files for samlple test cases, used as input to predict.py
+--./browsing_email.pcap : normal traffics when using email in browser
+--./nmap.pcap : traffics of running nmap on a victim machine.
+--./tcpflood.pcap : traffics of tcp SYN flood attack on a victim machine.
+
 ./*.csv : training and verifying dataset from NSL-KDD
 
-./tcpdump2gureKDDCup99/ : scripts from https://github.com/inigoperona/tcpdump2gureKDDCup99.
+./tcpdump2gureKDDCup99/* : tool from https://github.com/inigoperona/tcpdump2gureKDDCup99.
                           modified for service_name attribute and to run in new version zeek.
+./cache/* : runtime folder for ./tcpdump2gureKDDCup99/. do not delete the folder.
 ~~~
 
   
