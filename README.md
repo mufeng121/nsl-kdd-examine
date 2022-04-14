@@ -15,10 +15,12 @@ pip install -r requirements.txt
 
 ## Run
 ```shell
-# The .pcap is the network traffic data, which can be replaced by any .pcap format file
-python predict.py best_dt_clf.joblib nmap.pcap
+# The .pcap is the network traffic data, which can be replaced by any .pcap format file.
+# The output path is the file where you want to output your own dataset with KDD attributes.
+# default to be output.csv
+python predict.py best_dt_clf.joblib nmap.pcap <output path>
 # or
-python predict.py model1 nmap.pcap
+python predict.py model1 nmap.pcap <output path> 
 ```
 <img src="media/run.png" width="80%" height="80%" />
 
