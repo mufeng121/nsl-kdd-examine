@@ -27,9 +27,9 @@ if len(sys.argv) == 4:
     outputfile = sys.argv[3]
 
 os.system("zeek -r " + datapath + " ./tcpdump2gureKDDCup99/darpa2gurekddcup.zeek > ./cache/conn.list 2>/dev/null")
-os.system("rm *.log 2>/dev/null")
 os.system("sort -n ./cache/conn.list > ./cache/conn_sort.list 2>/dev/null")
 os.system("gcc ./tcpdump2gureKDDCup99/trafAld.c -o ./tcpdump2gureKDDCup99/trafAld 2>/dev/null")
+os.system("rm *.log 2>/dev/null")
 os.system("./tcpdump2gureKDDCup99/trafAld ./cache/conn_sort.list 2>/dev/null")
 
 col_names = ["number","start_time","orig_port","resp_port","orig_ip","resp_ip","duration","protocol","service","flag","src_bytes","dst_bytes","land","wrong_fragment","urgent","hot",
