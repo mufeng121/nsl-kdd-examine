@@ -5,7 +5,8 @@ Anomaly intrusion detection system
 ### Installing tools
 ```shell
 # Install zeek for running the bro scripy
-brew install zeek
+# https://docs.zeek.org/en/master/install.html for further details
+brew install zeek # with brew
 ```
 ### Installing dependencies
 ```shell
@@ -16,6 +17,8 @@ pip install -r requirements.txt
 ```shell
 # The .pcap is the network traffic data, which can be replaced by any .pcap format file
 python predict.py best_dt_clf.joblib nmap.pcap
+# or
+python predict.py model1 nmap.pcap
 ```
 
 ## Notes

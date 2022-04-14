@@ -53,28 +53,51 @@ df_test['service']= df_test['service'].cat.codes
 df_test['flag'] = df_test['flag'].astype('category')
 df_test['flag']= df_test['flag'].cat.codes
 x_test = df_test.iloc[:,:]
+if '.joblib' in model:
+    clf = load(model)
+    y_pred = clf.predict(x_test)
+    print("=========predicting==========")
 
-clf = load(model)
+    print(df_test.shape[0], "connections are examined\n")
+    print((y_pred=="normal").sum(), "connections are predict to be normal\n")
 
-y_pred = clf.predict(x_test)
+    if 'dos' in y_pred:
+        print("dos attack might happend!")
+        print((y_pred=="dos").sum(), "connections are predict to be dos attack.\n")
+    if 'probe' in y_pred:
+        print("probe attack might happend!")
+        print((y_pred=="probe").sum(), "connections are predict to be probe attack.\n")
+    if 'r2l' in y_pred:
+        print("r2l attack might happend!")
+        print((y_pred=="r2l").sum(), "connections are predict to be r2l attack.\n")
+    if 'u2r' in y_pred:
+        print("u2r attack might happend!")
+        print((y_pred=="u2r").sum(), "connections are predict to be u2r attack.\n")
+        
+    print("=============================")
+    print("For the accuracy of this prediction, run same model with \n 'python test.py model.joblib test.csv'")
 
-print("=========predicting==========")
-print(df_test.shape[0], "connections are examined\n")
-print((y_pred=="normal").sum(), "connections are predict to be normal\n")
+else:
+    loaded_model = tf.keras.models.load_model(model)
+    y_pred = np.argmax(loaded_model.predict(x_test), axis=-1)
+    print(type(y_pred))
+    print("=========predicting==========")
 
-if 'dos' in y_pred:
-    print("dos attack might happend!")
-    print((y_pred=="dos").sum(), "connections are predict to be dos attack.\n")
-if 'probe' in y_pred:
-    print("probe attack might happend!")
-    print((y_pred=="probe").sum(), "connections are predict to be probe attack.\n")
-if 'r2l' in y_pred:
-    print("r2l attack might happend!")
-    print((y_pred=="r2l").sum(), "connections are predict to be r2l attack.\n")
-if 'u2r' in y_pred:
-    print("u2r attack might happend!")
-    print((y_pred=="u2r").sum(), "connections are predict to be u2r attack.\n")
-    
-print("=============================")
-print("For the accuracy of this prediction, run same model with \n 'python test.py model.joblib test.csv'")
+    print(df_test.shape[0], "connections are examined\n")
+    print((y_pred==0).sum(), "connections are predict to be normal\n")
 
+    if 1 in y_pred:
+        print("dos attack might happend!")
+        print((y_pred==1).sum(), "connections are predict to be dos attack.\n")
+    if 2 in y_pred:
+        print("probe attack might happend!")
+        print((y_pred==2).sum(), "connections are predict to be probe attack.\n")
+    if 3 in y_pred:
+        print("r2l attack might happend!")
+        print((y_pred==3).sum(), "connections are predict to be r2l attack.\n")
+    if 4 in y_pred:
+        print("u2r attack might happend!")
+        print((y_pred==4).sum(), "connections are predict to be u2r attack.\n")
+        
+    print("=============================")
+    print("For the accuracy of this prediction, run same model with \n 'python test.py model.joblib test.csv'")
