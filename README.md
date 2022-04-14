@@ -2,7 +2,7 @@
 
 # Set up Guide
 
-1. Before running the code for model training, data_preparation_and_modeling.ipynb, please install the following packages in requirements.txt:  
+1. Before running the code for model training, data_preparation_and_modeling.ipynb, please install the required packages in requirements.txt:  
    pip install -r requirements.txt
    
    train.csv and test.csv are required and provided
