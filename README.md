@@ -1,14 +1,31 @@
 # nsl-kdd-examine
+Anomaly intrusion detection system
 
-# Set up Guide
+## Setup
+### Installing tools
+```shell
+# Install zeek for running the bro scripy
+brew install zeek
+```
+### Installing dependencies
+```shell
+pip install -r requirements.txt
+```
 
-1. Before running the code for model training, data_preparation_and_modeling.ipynb, please install the required packages in requirements.txt:  
-   pip install -r requirements.txt
-   
-   train.csv and test.csv are required and provided
-   
-2. To test the stored models' performances with test.py, please run it with the format below:
-  python test.py vote_clf.joblib test.csv OR python test.py model1 test.csv
+## Run
+```shell
+# The .pcap is the network traffic data, which can be replaced by any .pcap format file
+python predict.py best_dt_clf.joblib nmap.pcap
+```
+
+## Notes
+If you want to test the program performance with the NSK-KDD test dataset, please run: 
+```shell
+python test.py vote_clf.joblib test.csv
+
+#or
+python test.py model1 test.csv
+```
   
 
   
