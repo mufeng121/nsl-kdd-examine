@@ -30,7 +30,22 @@ python test.py vote_clf.joblib test.csv
 #or
 python test.py model1 test.csv
 ```
-  
+
+# Files
+~~~
+./predict.py : main ids script
+./test.py : model accuracy test script
+./data_preparation_and_modeling.ipynb : notebook file used for training models
+
+./*.joblib : trained joblib models, can be used as input to predict.py and test.py
+./model1~5 : trained joblib models, can be used as input to predict.py and test.py
+
+./*.pcap : samlple test case pcap files, used as input to predict.py
+./*.csv : training and verifying dataset from NSL-KDD
+
+./tcpdump2gureKDDCup99/ : scripts from https://github.com/inigoperona/tcpdump2gureKDDCup99.
+                          modified for service_name attribute and to run in new version zeek.
+~~~
 
   
    
