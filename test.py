@@ -21,12 +21,12 @@ model = sys.argv[1]
 test_data = sys.argv[2]
 
 col_names = ["duration","protocol","service","flag","src_bytes","dst_bytes","land","wrong_fragment","urgent","hot",
-            "num_failed_logins","logged_in","num_compromised","root_shell","su_attempted","num_root","num_file_creations",
-            "num_shells","num_access_files","num_outbound_cmds","is_hot_logins","is_giest_login","count","srv_count",
-             "serror_rate","srv_serror_rate","rerror_rate","srv_rerror_rate","same_srv_rate","diff_srv_rate","srv_diff_host_rate",
-            "dst_host_count","dst_host_srv_count","dst_host_same_srv_rate","dst_host_diff_srv_rate","dst_host_same_src_port_rate",
-            "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate","dst_host_rerror_rate","dst_host_srv_rerror_rate",
-            "class","difficulty_score"]
+			"num_failed_logins","logged_in","num_compromised","root_shell","su_attempted","num_root","num_file_creations",
+			"num_shells","num_access_files","num_outbound_cmds","is_hot_logins","is_giest_login","count","srv_count",
+			 "serror_rate","srv_serror_rate","rerror_rate","srv_rerror_rate","same_srv_rate","diff_srv_rate","srv_diff_host_rate",
+			"dst_host_count","dst_host_srv_count","dst_host_same_srv_rate","dst_host_diff_srv_rate","dst_host_same_src_port_rate",
+			"dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate","dst_host_rerror_rate","dst_host_srv_rerror_rate",
+			"class","difficulty_score"]
 
 
 df_test = pd.read_csv(test_data,header=None, names=col_names)
@@ -41,21 +41,51 @@ df_test['flag']= df_test['flag'].cat.codes
 y_test = df_test.iloc[:,41]
 x_test = df_test.iloc[:,0:41]
 
-clf = load(model)
+if 'joblib' in model:
+	clf = load(model)
 
-y_pred = clf.predict(x_test)
-print("total accuracy:",metrics.accuracy_score(y_test, y_pred))
-result = confusion_matrix(y_test, y_pred)
+	y_pred = clf.predict(x_test)
+	print("total accuracy:",metrics.accuracy_score(y_test, y_pred))
+	result = confusion_matrix(y_test, y_pred)
 
-print("dos accuracy:",result[0][0]/sum(result[0]))
-print("normal accuracy",result[1][1]/sum(result[1]))
-print("probe accuracy",result[2][2]/sum(result[2]))
-print("r2l accuracy",result[3][3]/sum(result[3]))
-print("u2r accuracy",result[4][4]/sum(result[4]))
+	print("dos accuracy:",result[0][0]/sum(result[0]))
+	print("normal accuracy",result[1][1]/sum(result[1]))
+	print("probe accuracy",result[2][2]/sum(result[2]))
+	print("r2l accuracy",result[3][3]/sum(result[3]))
+	print("u2r accuracy",result[4][4]/sum(result[4]))
 
-plot_confusion_matrix(clf, x_test, y_test)
+	plot_confusion_matrix(clf, x_test, y_test)
 
-print("Classification Report")
-print(classification_report(y_test, y_pred))
+	print("Classification Report")
+	print(classification_report(y_test, y_pred))
+else:
+	df_test['class'] = df_test['class'].astype('category')
+	df_test['class']= df_test['class'].cat.codes
 
+	y_test = df_test.iloc[:,41]
 
+	loaded_model = tf.keras.models.load_model(model)
+	y_result = loaded_model.predict_classes(x_test, verbose=1)
+	y_pred = []
+	for label in y_result:
+		if label == 0:
+			y_pred.append(0)
+		elif label == 1:
+			y_pred.append(1)
+		elif label == 2:
+			y_pred.append(2)
+		elif label == 3:
+			y_pred.append(3)
+		else:
+			y_pred.append(4)
+
+	print("total accuracy:",metrics.accuracy_score(y_test, y_pred))
+	result = confusion_matrix(y_test, y_pred)
+	print(result)
+	print("dos accuracy:",result[0][0]/sum(result[0]))
+	print("normal accuracy",result[1][1]/sum(result[1]))
+	print("probe accuracy",result[2][2]/sum(result[2]))
+	print("r2l accuracy",result[3][3]/sum(result[3]))
+	print("u2r accuracy",result[4][4]/sum(result[4]))
+	print("Classification Report")
+	print(classification_report(y_test, y_pred))
