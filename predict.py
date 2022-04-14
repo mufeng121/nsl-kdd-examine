@@ -32,7 +32,7 @@ os.system("sort -n ./cache/conn.list > ./cache/conn_sort.list 2>/dev/null")
 os.system("gcc ./tcpdump2gureKDDCup99/trafAld.c -o ./tcpdump2gureKDDCup99/trafAld 2>/dev/null")
 os.system("./tcpdump2gureKDDCup99/trafAld ./cache/conn_sort.list 2>/dev/null")
 
-col_names = ["duration","protocol","service","flag","src_bytes","dst_bytes","land","wrong_fragment","urgent","hot",
+col_names = ["number","start_time","orig_port","resp_port","orig_ip","resp_ip","duration","protocol","service","flag","src_bytes","dst_bytes","land","wrong_fragment","urgent","hot",
             "num_failed_logins","logged_in","num_compromised","root_shell","su_attempted","num_root","num_file_creations",
             "num_shells","num_access_files","num_outbound_cmds","is_hot_logins","is_giest_login","count","srv_count",
              "serror_rate","srv_serror_rate","rerror_rate","srv_rerror_rate","same_srv_rate","diff_srv_rate","srv_diff_host_rate",
@@ -41,9 +41,9 @@ col_names = ["duration","protocol","service","flag","src_bytes","dst_bytes","lan
             ]
 
 
-df_test = pd.read_csv("output.csv",header=None,delimiter = " ")
-df_test = df_test.drop(labels=[0,1,2,3,4,5],axis=1)
-df_test.columns=col_names
+df_test = pd.read_csv("output.csv",header=None,delimiter = " ",names=col_names)
+df_ip_list = df_test.iloc[:,:6]
+df_test = df_test.drop(labels=["number","start_time","orig_port","resp_port","orig_ip","resp_ip"],axis=1)
 df_test.to_csv(outputfile, sep="\t")
 print("Dataset is saved to", outputfile)
 df_test['protocol'] = df_test['protocol'].astype('category')
@@ -59,14 +59,21 @@ clf = load(model)
 y_pred = clf.predict(x_test)
 
 print("=========predicting==========")
+print(df_test.shape[0], "connections are examined\n")
+print((y_pred=="normal").sum(), "connections are predict to be normal\n")
+
 if 'dos' in y_pred:
     print("dos attack might happend!")
+    print((y_pred=="dos").sum(), "connections are predict to be dos attack.\n")
 if 'probe' in y_pred:
     print("probe attack might happend!")
+    print((y_pred=="probe").sum(), "connections are predict to be probe attack.\n")
 if 'r2l' in y_pred:
     print("r2l attack might happend!")
+    print((y_pred=="r2l").sum(), "connections are predict to be r2l attack.\n")
 if 'u2r' in y_pred:
     print("u2r attack might happend!")
+    print((y_pred=="u2r").sum(), "connections are predict to be u2r attack.\n")
     
 print("=============================")
 print("For the accuracy of this prediction, run same model with \n 'python test.py model.joblib test.csv'")
