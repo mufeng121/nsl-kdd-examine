@@ -27,10 +27,7 @@ python predict.py model1 nmap.pcap <output path>
 ## Notes
 If you want to test the program performance with the NSK-KDD test dataset, please run: 
 ```shell
-python test.py vote_clf.joblib test.csv
-
-#or
-python test.py model1 test.csv
+python test.py best_dt_clf.joblib test.csv
 ```
 
 # Files
