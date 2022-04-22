@@ -30,7 +30,7 @@ If you want to test the program performance with the NSK-KDD test dataset, pleas
 python test.py best_dt_clf.joblib test.csv
 ```
 
-# Files -
+# Files
 ~~~
 ./predict.py : main ids script
 ./test.py : model accuracy test script
